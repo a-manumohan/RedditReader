@@ -16,9 +16,6 @@ public class NetworkManager {
 
     private RedditService mRedditService;
 
-    private int FETCH_COUNT = 25;
-    private String SEARCH_TEXT = "tennis";
-
     public static NetworkManager getInstance() {
         if (mSharedNetworkManager == null) {
             mSharedNetworkManager = new NetworkManager();
@@ -34,20 +31,18 @@ public class NetworkManager {
     }
 
     public Observable<ArrayList<Feed>> load(String text, int limit) {
-        SEARCH_TEXT = text;
-        FETCH_COUNT = limit;
-        return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, "", "")
+        return mRedditService.search(text, limit, "", "")
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 
 
-    public Observable<ArrayList<Feed>> loadAfter(String after) {
-        return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, after, "")
+    public Observable<ArrayList<Feed>> loadAfter(String text,int limit,String after) {
+        return mRedditService.search(text, limit, after, "")
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 
-    public Observable<ArrayList<Feed>> loadBefore(String before) {
-        return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, "", before)
+    public Observable<ArrayList<Feed>> loadBefore(String text, int limit,String before) {
+        return mRedditService.search(text, limit, "", before)
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 

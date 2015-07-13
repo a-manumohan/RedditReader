@@ -146,7 +146,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         loading = true;
         mProgressBar.setVisibility(View.VISIBLE);
         FeedDAO lastFeed = mFeeds.get(mFeeds.size() - 1);
-        mNetworkManager.loadAfter(lastFeed.getName())
+        mNetworkManager.loadAfter(SEARCH_TEXT,FETCH_COUNT,lastFeed.getName())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(feeds -> {
@@ -170,7 +170,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         loading = true;
         mProgressBar.setVisibility(View.VISIBLE);
         FeedDAO firstFeed = mFeeds != null && mFeeds.size() > 0 ? mFeeds.get(0) : null;
-        Observable<ArrayList<Feed>> fetchObservable = firstFeed != null ? mNetworkManager.loadBefore(firstFeed.getName()) : mNetworkManager.load(SEARCH_TEXT,FETCH_COUNT);
+        Observable<ArrayList<Feed>> fetchObservable = firstFeed != null ? mNetworkManager.loadBefore(SEARCH_TEXT,FETCH_COUNT,firstFeed.getName()) : mNetworkManager.load(SEARCH_TEXT,FETCH_COUNT);
         fetchObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

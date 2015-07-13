@@ -51,7 +51,41 @@ public class NetworkManagerTest {
         reddit.setData(data);
         when(redditService.search(searchText, limit, after, before)).thenReturn(Observable.just(reddit));
 
-        assertEquals("mapping error", limit, networkManager.load(searchText,limit).toBlocking().single().size());
+        assertEquals("mapping error", limit, networkManager.load(searchText, limit).toBlocking().single().size());
+
+    }
+    @Test
+    public void loadAfter() {
+        String searchText = "tennis", before = "", after = "xcssds";
+        int limit = 3;
+        Reddit reddit = new Reddit();
+        Reddit.Data data = new Reddit.Data();
+        ArrayList<Feed> feeds = new ArrayList<>();
+        feeds.add(new Feed());
+        feeds.add(new Feed());
+        feeds.add(new Feed());
+        data.setFeeds(feeds);
+        reddit.setData(data);
+        when(redditService.search(searchText, limit, after, before)).thenReturn(Observable.just(reddit));
+
+        assertEquals("mapping error", limit, networkManager.loadAfter(searchText, limit, after).toBlocking().single().size());
+
+    }
+    @Test
+    public void loadBefore() {
+        String searchText = "tennis", before = "sdsdsd", after = "";
+        int limit = 3;
+        Reddit reddit = new Reddit();
+        Reddit.Data data = new Reddit.Data();
+        ArrayList<Feed> feeds = new ArrayList<>();
+        feeds.add(new Feed());
+        feeds.add(new Feed());
+        feeds.add(new Feed());
+        data.setFeeds(feeds);
+        reddit.setData(data);
+        when(redditService.search(searchText, limit, after, before)).thenReturn(Observable.just(reddit));
+
+        assertEquals("mapping error", limit, networkManager.loadBefore(searchText, limit, before).toBlocking().single().size());
 
     }
 }
