@@ -36,6 +36,9 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private OnFragmentInteractionListener mListener;
 
+    private static final String SEARCH_TEXT = "tennis";
+    private static final int FETCH_COUNT = 25;
+
     @Bind(R.id.feeds_recyclerview)
     RecyclerView mFeedsRecyclerView;
 
@@ -119,7 +122,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mProgressBar.setVisibility(View.VISIBLE);
         loading = true;
         clearFeeds(getActivity());
-        mNetworkManager.load()
+        mNetworkManager.load(SEARCH_TEXT,FETCH_COUNT)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(feeds -> {
@@ -167,7 +170,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         loading = true;
         mProgressBar.setVisibility(View.VISIBLE);
         FeedDAO firstFeed = mFeeds != null && mFeeds.size() > 0 ? mFeeds.get(0) : null;
-        Observable<ArrayList<Feed>> fetchObservable = firstFeed != null ? mNetworkManager.loadBefore(firstFeed.getName()) : mNetworkManager.load();
+        Observable<ArrayList<Feed>> fetchObservable = firstFeed != null ? mNetworkManager.loadBefore(firstFeed.getName()) : mNetworkManager.load(SEARCH_TEXT,FETCH_COUNT);
         fetchObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

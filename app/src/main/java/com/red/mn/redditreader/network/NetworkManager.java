@@ -1,7 +1,5 @@
 package com.red.mn.redditreader.network;
 
-import android.content.Context;
-
 import com.red.mn.redditreader.Constants;
 import com.red.mn.redditreader.model.Feed;
 
@@ -17,8 +15,9 @@ public class NetworkManager {
     private static NetworkManager mSharedNetworkManager;
 
     private RedditService mRedditService;
-    private static final int FETCH_COUNT = 25;
-    private static final String SEARCH_TEXT = "tennis";
+
+    private int FETCH_COUNT = 25;
+    private String SEARCH_TEXT = "tennis";
 
     public static NetworkManager getInstance() {
         if (mSharedNetworkManager == null) {
@@ -34,21 +33,29 @@ public class NetworkManager {
         mRedditService = restAdapter.create(RedditService.class);
     }
 
-    public Observable<ArrayList<Feed>> load() {
+    public Observable<ArrayList<Feed>> load(String text, int limit) {
+        SEARCH_TEXT = text;
+        FETCH_COUNT = limit;
         return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, "", "")
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 
 
-    public Observable<ArrayList<Feed>> loadAfter( String after) {
+    public Observable<ArrayList<Feed>> loadAfter(String after) {
         return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, after, "")
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 
-    public Observable<ArrayList<Feed>> loadBefore( String before) {
+    public Observable<ArrayList<Feed>> loadBefore(String before) {
         return mRedditService.search(SEARCH_TEXT, FETCH_COUNT, "", before)
                 .flatMap(reddit -> Observable.just(reddit.getData().getFeeds()));
     }
 
+    public RedditService getRedditService() {
+        return mRedditService;
+    }
 
+    public void setRedditService(RedditService redditService) {
+        this.mRedditService = redditService;
+    }
 }
