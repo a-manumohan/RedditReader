@@ -3,8 +3,8 @@ package com.red.mn.redditreader.network;
 
 import com.red.mn.redditreader.model.Reddit;
 
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
